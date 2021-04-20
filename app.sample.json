@@ -1,0 +1,17 @@
+{
+  "profile": "aws-profile",
+  "accountId": "aws-account-id",
+  "awsRegion": "us-east-1",
+  "lambdaFunction": "lambda-function-name",
+  "apiResource": "api-resource-name",
+  "apiMethod": "POST",
+  "stageName": "v1",
+  "your_variable_1": "",
+  "your_variable_2": "",
+  "lambdaTimeout": 60,
+  "lambdaMemory": 512,
+  "apiRateLimit": 100,
+  "apiBurstLimit": 50,
+  "apiQuotaLimit": 10000,
+  "apiQuotaPeriod": "DAY"
+}

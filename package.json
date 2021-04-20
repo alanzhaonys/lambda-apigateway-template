@@ -1,0 +1,10 @@
+{
+  "name": "lambda-apigateway-template",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Alan Zhao",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.1"
+  }
+}
