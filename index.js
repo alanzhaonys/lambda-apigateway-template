@@ -1,6 +1,8 @@
 "use strict";
 
 const axios = require("axios");
+const aws = require("aws-sdk");
+const ses = new aws.SES({ region: "us-east-1" });
 
 //const allowMethods = "GET, POST";
 const allowMethods = "POST";
@@ -12,9 +14,6 @@ const headers = {
   "Access-Control-Allow-Headers": "*",
 };
 
-const aws = require("aws-sdk");
-const ses = new aws.SES({ region: "us-east-1" });
-
 exports.handler = async (event, context, callback) => {
   // Log request here
   console.log("Full Event: " + JSON.stringify(event));
@@ -23,8 +22,8 @@ exports.handler = async (event, context, callback) => {
   const your_variable_1 = process.env.YOUR_VARIABLE_1;
   const your_variable_2 = process.env.YOUR_VARIABLE_2;
 
-	const emailSender = process.env.EMAIL_SENDER;
-	const emailRecipients = process.env.EMAIL_RECIPIENTS;
+  const emailSender = process.env.EMAIL_SENDER;
+  const emailRecipients = process.env.EMAIL_RECIPIENTS;
 
   if (!your_variable_1 || !your_variable_2) {
     return callback(
@@ -48,7 +47,7 @@ exports.handler = async (event, context, callback) => {
       {
         auth: {
           username: "username",
-          password: "password"
+          password: "password",
         },
         headers: {
           "Content-Type": "application/json",
@@ -56,56 +55,56 @@ exports.handler = async (event, context, callback) => {
       }
     );
 
+    var nyTime = new Date().toLocaleString("en-US", {
+      timeZone: "America/New_York",
+    });
+    nyTime = new Date(nyTime);
 
-    		var nyTime = new Date().toLocaleString("en-US", {
-			timeZone: "America/New_York",
-		});
-		nyTime = new Date(nyTime);
+    let emailSubject = "Email test " + nyTime.toLocaleString() + " EST";
 
-		let emailSubject = "Email test " + nyTime.toLocaleString() + " EST";
+    let emailMessage = emailSubject + "\n\n";
+    emailMessage += "\ntesting\n";
+    emailMessage += "=============\n";
 
-		let emailMessage = emailSubject + "\n\n";
-		emailMessage += "\ntesting\n";
-		emailMessage += "=============\n";
+    var sesParams = {
+      Destination: {
+        ToAddresses: emailRecipients.split(","),
+      },
+      Message: {
+        Body: {
+          Text: {
+            Data: emailMessage,
+          },
+        },
+        Subject: {
+          Data: emailSubject,
+        },
+      },
+      Source: emailSender,
+      ReplyToAddresses: [emailSender],
+      ReturnPath: emailSender,
+    };
 
-		var sesParams = {
-			Destination: {
-				ToAddresses: emailRecipients.split(","),
-			},
-			Message: {
-				Body: {
-					Text: {
-						Data: emailMessage,
-					},
-				},
-				Subject: {
-					Data: emailSubject,
-				},
-			},
-			Source: emailSender,
-			ReplyToAddresses: [emailSender],
-			ReturnPath: emailSender,
-		};
-
-		await ses.sendEmail(sesParams, function (error, data) {
-			if (error) {
-				return callback(
-					null,
-					createResponse(400, {
-						requestId: context.awsRequestId,
-						error: "Failed to send email: " + error,
-					})
-				);
-			} else {
-				return callback(
-					null,
-					createResponse(200, {
-						message: "Email sent successful",
-					})
-				);
-			}
-		}).promise();
-
+    await ses
+      .sendEmail(sesParams, function (error, data) {
+        if (error) {
+          return callback(
+            null,
+            createResponse(400, {
+              requestId: context.awsRequestId,
+              error: "Failed to send email: " + error,
+            })
+          );
+        } else {
+          return callback(
+            null,
+            createResponse(200, {
+              message: "Email sent successful",
+            })
+          );
+        }
+      })
+      .promise();
 
     return callback(
       null,

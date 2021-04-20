@@ -35,4 +35,4 @@ The throttling setting will apply to both method level and API key level
 You have to enable the CORS support by going to API endpoint, select method and Enable CORS. This enables the OPTIONS method.
 https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/OPTIONS
 
-After you manually enabled CORS, run `./deploy-api.sh` to take effect. You only need to do it once.
+After you manually enabled CORS, run `./deploy-api.sh` to take effect. It will take a few mins. You only need to do it once.
