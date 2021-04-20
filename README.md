@@ -30,3 +30,9 @@ Note that the Lambda function has a default maximum conconurrency level of 1000.
 - apiQuotaPeriod - Period of time quota limit is applied, valid values are "DAY", "WEEK" or "MONTH". 
 
 The throttling setting will apply to both method level and API key level
+
+## CORS Support
+You have to enable the CORS support by going to API endpoint, select method and Enable CORS. This enables the OPTIONS method.
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/OPTIONS
+
+After you manually enabled CORS, run `./deploy-api.sh` to take effect. You only need to do it once.
