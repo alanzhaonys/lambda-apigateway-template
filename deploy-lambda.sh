@@ -66,11 +66,25 @@ else
     --profile $PROFILE \
     --region $AWS_REGION >/dev/null 2>&1
 
+  readonly ASSUME_ROLE_POLICY='{
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Principal":
+          {
+            "Service": "lambda.amazonaws.com"
+          },
+          "Action": "sts:AssumeRole"
+        }
+      ]
+    }'
+
   readonly LAMBDA_ROLE=($(aws iam create-role \
     --role-name ${LAMBDA_FUNCTION}-lambda-role \
     --profile $PROFILE \
     --region $AWS_REGION \
-    --assume-role-policy-document '{"Version": "2012-10-17","Statement": [{ "Effect": "Allow", "Principal": {"Service": "lambda.amazonaws.com"}, "Action": "sts:AssumeRole"}]}' | jq -r ".Role.Arn"))
+    --assume-role-policy-document "$ASSUME_ROLE_POLICY" | jq -r ".Role.Arn"))
 
   if [ "$LAMBDA_ROLE" == "" ]; then
     echo Failed to create Lambda role, abort
@@ -82,13 +96,46 @@ else
 
   echo Created Lambda role ${LAMBDA_ROLE}
 
+  # Create custom SES policy
+  readonly SES_POLICY="{
+    \"Version\": \"2012-10-17\",
+    \"Statement\": [
+      {
+        \"Effect\": \"Allow\",
+        \"Action\": [
+          \"ses:SendEmail\",
+          \"ses:SendRawEmail\"
+        ],
+        \"Resource\": \"*\"
+      }
+    ]
+  }"
+
+  readonly SES_POLICY_ARN=($(aws iam create-policy \
+    --policy-name ${LAMBDA_FUNCTION}-lambda-ses-policy \
+    --policy-document "$SES_POLICY" \
+    --profile $PROFILE \
+    --region $AWS_REGION | jq -r ".Policy.Arn"))
+
+  echo Created SES policy ARN: $SES_POLICY_ARN
+
+  # Attach managed AWSLambdaBasicExecutionRole policy
   aws iam attach-role-policy \
     --role-name ${LAMBDA_FUNCTION}-lambda-role \
     --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole \
     --profile $PROFILE \
     --region $AWS_REGION
 
-  echo Attached policy to the role
+  echo Attached AWSLambdaBasicExecutionRole policy to the role
+
+  # Attach SES policy
+  aws iam attach-role-policy \
+    --role-name ${LAMBDA_FUNCTION}-lambda-role \
+    --policy-arn $SES_POLICY_ARN \
+    --profile $PROFILE \
+    --region $AWS_REGION
+
+  echo Attached SES policy to the role
 
   aws lambda create-function \
     --function-name $LAMBDA_FUNCTION \
