@@ -85,26 +85,7 @@ exports.handler = async (event, context, callback) => {
       ReturnPath: emailSender,
     };
 
-    await ses
-      .sendEmail(sesParams, function (error, data) {
-        if (error) {
-          return callback(
-            null,
-            createResponse(400, {
-              requestId: context.awsRequestId,
-              error: "Failed to send email: " + error,
-            })
-          );
-        } else {
-          return callback(
-            null,
-            createResponse(200, {
-              message: "Email sent successful",
-            })
-          );
-        }
-      })
-      .promise();
+    await ses.sendEmail(sesParams).promise();
 
     return callback(
       null,
