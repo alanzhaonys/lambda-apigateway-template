@@ -107,10 +107,10 @@ exports.handler = async (event, context, callback) => {
     // For GET
     //return event[name] ? event[name] : event.queryStringParameters[name];
     // For POST
-    if (event[name]) {
+    if (event && event[name]) {
       return event[name];
     }
-    var body = JSON.parse(event.body);
+    let body = JSON.parse(event.body);
     return body[name];
   }
 
