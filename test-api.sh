@@ -25,4 +25,9 @@ if [ "$API_GATEWAY_ID" == "" ]; then
   exit
 fi
 
-curl -i -X $API_METHOD --header "x-api-key:${API_KEY}" https://${API_GATEWAY_ID}.execute-api.${AWS_REGION}.amazonaws.com/${STAGE_NAME}/${API_RESOURCE}
+API_URL=https://${API_GATEWAY_ID}.execute-api.${AWS_REGION}.amazonaws.com/${STAGE_NAME}/${API_RESOURCE}
+
+echo API URL: $API_URL
+echo API key: $API_KEY
+
+curl -i -X $API_METHOD --header "x-api-key:${API_KEY}" $API_URL
