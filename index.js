@@ -14,7 +14,7 @@ const headers = {
   "Access-Control-Allow-Headers": "*",
 };
 
-exports.handler = async (event, context, callback) => {
+exports.handler = async (event, context) => {
   // Log request here
   console.log("Full Event: " + JSON.stringify(event));
   console.log("Context: " + JSON.stringify(context));
@@ -26,13 +26,10 @@ exports.handler = async (event, context, callback) => {
   const emailRecipients = process.env.EMAIL_RECIPIENTS;
 
   if (!your_variable_1 || !your_variable_2) {
-    return callback(
-      null,
-      createResponse(400, {
-        requestId: context.awsRequestId,
-        error: "At least one parameter is missing",
-      })
-    );
+    return createResponse(400, {
+      requestId: context.awsRequestId,
+      error: "At least one parameter is missing",
+    });
   }
 
   try {
@@ -87,20 +84,15 @@ exports.handler = async (event, context, callback) => {
 
     await ses.sendEmail(sesParams).promise();
 
-    return callback(
-      null,
-      createResponse(200, {
-        message: "API call successful",
-      })
-    );
+    return createResponse(200, {
+      message: "API call successful",
+    });
+
   } catch (error) {
-    return callback(
-      null,
-      createResponse(400, {
-        requestId: context.awsRequestId,
-        error: "API call failed. " + error,
-      })
-    );
+    return createResponse(400, {
+      requestId: context.awsRequestId,
+      error: "API call failed. " + error,
+    });
   }
 
   function getVar(name) {
