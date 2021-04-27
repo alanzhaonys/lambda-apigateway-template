@@ -110,8 +110,15 @@ exports.handler = async (event, context, callback) => {
     if (event && event[name]) {
       return event[name];
     }
-    let body = JSON.parse(event.body);
-    return body[name];
+
+    if (event && event.body) {
+      let body = JSON.parse(event.body);
+      if (body[name]) {
+        return body[name];
+      }
+    }
+
+    return null;
   }
 
   function createResponse(status, body) {
