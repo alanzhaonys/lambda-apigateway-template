@@ -19,13 +19,13 @@ exports.handler = async (event, context) => {
   console.log("Full Event: " + JSON.stringify(event));
   console.log("Context: " + JSON.stringify(context));
 
-  const your_variable_1 = process.env.YOUR_VARIABLE_1;
-  const your_variable_2 = process.env.YOUR_VARIABLE_2;
+  const env_variable_1 = process.env.ENV_VARIABLE_1;
+  const env_variable_2 = process.env.ENV_VARIABLE_2;
 
   const emailSender = process.env.EMAIL_SENDER;
   const emailRecipients = process.env.EMAIL_RECIPIENTS;
 
-  if (!your_variable_1 || !your_variable_2) {
+  if (!env_variable_1 || !env_variable_2) {
     return createResponse(400, {
       requestId: context.awsRequestId,
       error: "At least one parameter is missing",
@@ -34,8 +34,8 @@ exports.handler = async (event, context) => {
 
   try {
     let payload = {
-      variable_1: your_variable_1,
-      variable_2: your_variable_2,
+      variable_1: env_variable_1,
+      variable_2: env_variable_2,
     };
 
     const res = await axios.post(

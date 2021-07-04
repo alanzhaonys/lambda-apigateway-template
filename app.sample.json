@@ -12,6 +12,6 @@
   "apiBurstLimit": 50,
   "apiQuotaLimit": 10000,
   "apiQuotaPeriod": "DAY",
-  "your_variable_1": "",
-  "your_variable_2": ""
+  "env_variable_1": "",
+  "env_variable_2": ""
 }

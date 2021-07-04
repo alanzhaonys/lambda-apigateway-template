@@ -20,7 +20,7 @@ if [ 0 -eq $? ]; then
 
   aws lambda update-function-configuration \
     --function-name $LAMBDA_FUNCTION \
-    --environment "{\"Variables\": {\"YOUR_VARIABLE_1\": \"${YOUR_VARIABLE_1}\", \"YOUR_VARIABLE_2\": \"${YOUR_VARIABLE_2}\"}}" \
+    --environment "{\"Variables\": {\"ENV_VARIABLE_1\": \"${ENV_VARIABLE_1}\", \"ENV_VARIABLE_2\": \"${ENV_VARIABLE_2}\"}}" \
     --timeout $LAMBDA_TIMEOUT \
     --memory-size $LAMBDA_MEMORY \
     --profile $PROFILE \
@@ -141,7 +141,7 @@ else
     --function-name $LAMBDA_FUNCTION \
     --zip-file fileb://${LAMBDA_FUNCTION}.zip \
     --handler index.handler \
-    --environment "{\"Variables\": {\"YOUR_VARIABLE_1\": \"${YOUR_VARIABLE_1}\", \"YOUR_VARIABLE_2\": \"${YOUR_VARIABLE_2}\"}}" \
+    --environment "{\"Variables\": {\"ENV_VARIABLE_1\": \"${ENV_VARIABLE_1}\", \"ENV_VARIABLE_2\": \"${ENV_VARIABLE_2}\"}}" \
     --runtime nodejs12.x \
     --timeout $LAMBDA_TIMEOUT \
     --memory-size $LAMBDA_MEMORY \

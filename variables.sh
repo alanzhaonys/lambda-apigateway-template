@@ -17,8 +17,8 @@ readonly API_RESOURCE=$(jq -r ".apiResource" $APP_JSON_FILE)
 readonly API_METHOD=$(jq -r ".apiMethod" $APP_JSON_FILE)
 readonly STAGE_NAME=$(jq -r ".stageName" $APP_JSON_FILE)
 
-readonly YOUR_VARIABLE_1=$(jq -r ".your_variable_1" $APP_JSON_FILE)
-readonly YOUR_VARIABLE_2=$(jq -r ".your_variable_2" $APP_JSON_FILE)
+readonly ENV_VARIABLE_1=$(jq -r ".env_variable_1" $APP_JSON_FILE)
+readonly ENV_VARIABLE_2=$(jq -r ".env_variable_2" $APP_JSON_FILE)
 
 # Check jq installation
 if ! hash jq 2>/dev/null; then
