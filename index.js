@@ -28,7 +28,7 @@ exports.handler = async (event, context) => {
   if (!env_variable_1 || !env_variable_2) {
     return createResponse(400, {
       requestId: context.awsRequestId,
-      error: "At least one parameter is missing",
+      error: "At least one environment variable is missing",
     });
   }
 
